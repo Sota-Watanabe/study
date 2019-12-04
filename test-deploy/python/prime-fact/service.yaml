@@ -1,0 +1,15 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: prime-fact 
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+#      - image: docker.io/watanabesota/prime-fact
+      - image: watanabesota/prime-fact:latest
+
+        env:
+        - name: TARGET
+          value: "1 prime-fact "

@@ -1,0 +1,21 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: reqctr2
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: docker.io/watanabesota/reqctr2
+        env:
+        - name: GIT_URL
+          value: "https://github.com/lucasjellema/microservices-choreography-kubernetes-workshop-june2017"
+        - name: APP_PORT
+          value: "8080"
+        - name: APP_HOME
+          value: "part1"
+        - name: APP_STARTUP
+          value: "requestCounter.js"
+        # ports:
+        # - containerPort: 8080

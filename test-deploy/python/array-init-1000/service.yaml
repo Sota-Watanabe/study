@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: array-init-1000 
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: watanabesota/array-init-1000:latest
+
+        env:
+        - name: TARGET
+          value: "3 array-init "
+        - name: NUM 
+          value: "10000000" 

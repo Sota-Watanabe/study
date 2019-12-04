@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: sum-num-10000000
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: watanabesota/sum-num
+
+        env:
+        - name: TARGET
+          value: "3 sum-num"
+        - name: LOOP
+          value: "10000000"

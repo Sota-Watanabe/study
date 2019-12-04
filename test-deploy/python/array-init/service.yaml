@@ -1,0 +1,18 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: array-init
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: watanabesota/array-init:latest
+
+        env:
+        - name: TARGET
+          value: "3 array-init "
+        - name: ARRAY-NUM 
+          value: "10000000" 
+        - name: RANDOM-NUM
+          value: "10"
