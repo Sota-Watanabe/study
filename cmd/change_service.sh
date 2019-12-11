@@ -1,11 +1,26 @@
 #!/bin/sh
 cd $(dirname $0)
+echo 'Start after 3 seconds'
+sleep 3
 while read array
 do
   while read loop
   do
-  echo "array=" $array "loop=" $loop
+  
+  NUM=`docker ps -f name=user| wc -l`
+  while [ $NUM != '1' ];
+  do
+    echo 'still running'
+    sleep 1
+    NUM=`docker ps -f name=user| wc -l`
+  done
+
+  echo 'if container running, delete container'
   /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/cluster/kubectl.sh delete ksvc/array-init
+  echo ''
+  echo 'Start up under the following conditions'
+  echo "array=" $array "loop=" $loop
+  echo ''
 cat << EOF | /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/cluster/kubectl.sh  apply -f -
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
@@ -28,10 +43,18 @@ spec:
         - name: LOOP
           value: "$loop"
 EOF
+  sleep 5
+  NUM=`docker ps -f name=user| wc -l`
+  while [ $NUM != '1' ];
+  do
+    echo 'still running'
+    sleep 1
+    NUM=`docker ps -f name=user| wc -l`
+  done
+  echo 'end of container'
+  sleep 5
+  bash cpumem.sh
 
-  echo "sloop"
-  sleep 10
-  
   done < loop.txt  
 
 done < array.txt
