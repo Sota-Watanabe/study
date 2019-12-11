@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/
 times=1
 while getopts "tn:" OPT
 do
@@ -21,7 +22,7 @@ for((i = 0; i<$times; i++)); do
         INGRESSGATEWAY=istio-ingressgateway
   fi
   export IP_ADDRESS=localhost:$(cluster/kubectl.sh get svc $INGRESSGATEWAY --namespace istio-system   --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
-  OUTPUT=`curl -H "Host: helloworld-nodejs.default.example.com" http://${IP_ADDRESS}  -w "%{time_total}" `
+  OUTPUT=`curl -H "Host: array-init.default.example.com" http://${IP_ADDRESS}  -w "%{time_total}" `
   echo ''
 
   NUM=`docker ps -f name=user| wc -l`
