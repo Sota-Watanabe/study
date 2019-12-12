@@ -69,14 +69,21 @@ EOF
   echo 'Completion of Container registration'
   if "${cp}"; then
       echo 'making checkpoint ...'
-      cp_result=`docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp`
-      while [ $cp_result != 'array-init' ];
+      cp_flag=false
+      while [ $cp_flag != true ];
       do
         echo 'looping'
         sleep 1
         cp_result=`docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp`
+        echo $cp_result
+        echo $?
+        if [ $? -gt 0 ]; then
+          echo 'checkpoint error! one more chance!!'
+        else
+          cp_flag=true
+          echo 'OK! make checkpoint'
+        fi
       done
-      echo 'OK! make checkpoint'
       echo 'add array-init checkpoint-list.dat'
       echo array-init >> /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
   fi
