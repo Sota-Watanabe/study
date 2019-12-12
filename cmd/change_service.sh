@@ -1,5 +1,8 @@
 #!/bin/sh
 cp=false
+echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
+rm -r /cp/array-init
+
 while getopts "c" OPT
 do
   case $OPT in
@@ -28,7 +31,7 @@ do
   sleep 1
   echo ''
   echo 'Start up under the following conditions'
-  echo "array=" $array "loop=" $loop
+  echo "array=" $array "loop=" $loop "checkpoint=" $cp
   echo ''
   cat << EOF | /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/cluster/kubectl.sh  apply -f -
   apiVersion: serving.knative.dev/v1alpha1
@@ -65,16 +68,25 @@ EOF
   done
   echo 'Completion of Container registration'
   if "${cp}"; then
-      rm -r /cp/array-init
-      echo 'makeing checkpoint ...'
-      docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp
+      echo 'making checkpoint ...'
+      cp_result=`docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp`
+      while [ $cp_result != 'array-init' ];
+      do
+        echo 'looping'
+        sleep 1
+        cp_result=`docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp`
+      done
+      echo 'OK! make checkpoint'
+      echo 'add array-init checkpoint-list.dat'
+      echo array-init >> /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
   fi
 
 
-
   echo 'start cpumem.sh'
+  echo ''
   bash cpumem.sh
-
+  rm -r /cp/array-init
+  echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
+  
   done < loop.txt  
-
 done < array.txt
