@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: redmine-cp
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: docker.io/watanabesota/redmine-commit
+        env:
+        - name: TARGET
+          value: "redmine Sample v1"
+        resources:
+          limits:
+            cpu: "1500m"
