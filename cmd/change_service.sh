@@ -66,8 +66,6 @@ EOF
   done
   echo 'Completion of Container registration'
   if "${cp}"; then
-
-    rm -r /cp/array-init
       echo 'making checkpoint ...'
       cp_result=""
       while [ "$cp_result" == "" ] || [ "$cp_result" != "array-init" ];
