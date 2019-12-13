@@ -1,8 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 cp=false
 echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
-rm -r /cp/array-init
-
 while getopts "c" OPT
 do
   case $OPT in
@@ -56,7 +54,7 @@ do
             value: "$loop"
           resources:
             limits:
-              cpu: "1500m"
+              cpu: "1000m"
 EOF
 
   status=`check_curl.sh array-init`
@@ -68,21 +66,16 @@ EOF
   done
   echo 'Completion of Container registration'
   if "${cp}"; then
+
+    rm -r /cp/array-init
       echo 'making checkpoint ...'
-      cp_flag=false
-      while [ $cp_flag != true ];
+      cp_result=""
+      while [ "$cp_result" == "" ] || [ "$cp_result" != "array-init" ];
       do
         echo 'looping'
         sleep 1
         cp_result=`docker checkpoint create $(docker ps -f name=k8s_user-container_array-init -q ) array-init --leave-running --checkpoint-dir /cp`
         echo $cp_result
-        echo $?
-        if [ $? -gt 0 ]; then
-          echo 'checkpoint error! one more chance!!'
-        else
-          cp_flag=true
-          echo 'OK! make checkpoint'
-        fi
       done
       echo 'add array-init checkpoint-list.dat'
       echo array-init >> /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
