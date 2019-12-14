@@ -11,3 +11,6 @@ spec:
         env:
         - name: TARGET
           value: "Spring Boot Sample v1"
+        resources:
+          limits:
+            cpu: "1000m"
