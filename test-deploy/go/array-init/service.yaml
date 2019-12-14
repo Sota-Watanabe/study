@@ -18,3 +18,6 @@ spec:
           value: "10000"
         - name: LOOP
           value: "100000"
+        resources:
+          limits:
+            cpu: "1000m"
