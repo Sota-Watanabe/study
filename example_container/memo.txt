@@ -1,0 +1,2 @@
+Spring boot を使用したchatができなくなった1214 
+redmineは最高にめんどくさそうだからパス
