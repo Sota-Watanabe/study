@@ -1,0 +1,16 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: websocket-chat-cp
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: docker.io/watanabesota/websocket-chat-commit
+        env:
+        - name: TARGET
+          value: "websocket-chat v1"
+        resources:
+          limits:
+            cpu: "1000m"
