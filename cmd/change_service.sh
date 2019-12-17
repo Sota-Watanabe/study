@@ -54,7 +54,7 @@ do
             value: "$loop"
           resources:
             limits:
-              cpu: "1000m"
+              cpu: "500m"
 EOF
 
   status=`check_curl.sh array-init`
@@ -68,6 +68,7 @@ EOF
   if "${cp}"; then
       echo 'making checkpoint ...'
       cp_result=""
+      rm -r /cp/array-init
       while [ "$cp_result" == "" ] || [ "$cp_result" != "array-init" ];
       do
         echo 'looping'
@@ -83,7 +84,7 @@ EOF
   echo 'start cpumem.sh'
   echo ''
   bash cpumem.sh
-  rm -r /cp/array-init
+
   echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
   
   done < loop.txt  
