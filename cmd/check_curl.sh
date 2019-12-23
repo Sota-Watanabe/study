@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5
+cd /home/watanabe/go/src/k8s.io/kubernetes*
 if cluster/kubectl.sh get configmap config-istio -n knative-serving > /dev/null; then
        INGRESSGATEWAY=istio-ingressgateway
 fi

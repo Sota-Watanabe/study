@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/
+cd /home/watanabe/go/src/k8s.io/kubernetes*/
 times=1
 while getopts "tn:" OPT
 do

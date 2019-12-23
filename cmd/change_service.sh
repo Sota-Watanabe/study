@@ -1,6 +1,6 @@
 #!/bin/bash
 cp=false
-echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
+echo '' > /home/watanabe/go/src/k8s.io/kubernetes*/checkpoint-list.dat
 while getopts "c" OPT
 do
   case $OPT in
