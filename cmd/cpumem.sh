@@ -1,13 +1,18 @@
 #!/bin/bash
+cd /home/watanabe/go/src/k8s.io/kubernetes*/
 times=1
-while getopts "tn:" OPT
+KSVC="array-init"
+subdir=""
+while getopts "tn:k:d:" OPT
 do
   case $OPT in
     t) times=10;;
-    n) times=$OPTARG
+    n) times=$OPTARG;;
+    k) KSVC="$OPTARG";;
+    d) subdir="$OPTARG";;
   esac
 done
-
+echo $subdir
 for((i = 0; i<$times; i++)); do
 
   NUM=`docker ps -f name=user| wc -l`
@@ -21,12 +26,13 @@ for((i = 0; i<$times; i++)); do
         INGRESSGATEWAY=istio-ingressgateway
   fi
   export IP_ADDRESS=localhost:$(cluster/kubectl.sh get svc $INGRESSGATEWAY --namespace istio-system   --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
-  OUTPUT=`curl -H "Host: helloworld-nodejs.default.example.com" http://${IP_ADDRESS}  -w "%{time_total}" `
+  OUTPUT=`curl -H "Host: $KSVC.default.example.com" http://${IP_ADDRESS}$subdir  -w "%{time_total}" `
   echo ''
 
   NUM=`docker ps -f name=user| wc -l`
   while [ $NUM != '2' ];
   do
+    echo $NUM
     echo 'not only one'
     sleep 1
     NUM=`docker ps -f name=user| wc -l`

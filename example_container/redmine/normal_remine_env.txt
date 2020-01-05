@@ -1,0 +1,17 @@
+HOSTNAME=1d9d4c8d05a8
+REDMINE_VERSION=4.0.5
+RUBY_DOWNLOAD_SHA256=d5d6da717fd48524596f9b78ac5a2eeb9691753da5c06923a6c31190abe01a62
+REDMINE_DOWNLOAD_MD5=d25649272a9c347e4368cdd50e039e86
+RUBY_VERSION=2.6.5
+PWD=/usr/src/redmine
+BUNDLE_APP_CONFIG=/usr/local/bundle
+RUBY_MAJOR=2.6
+HOME=/home/redmine
+BUNDLE_SILENCE_ROOT_WARNING=1
+GEM_HOME=/usr/local/bundle
+TERM=xterm
+SHLVL=1
+BUNDLE_PATH=/usr/local/bundle
+PATH=/usr/local/bundle/bin:/usr/local/bundle/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RAILS_ENV=production
+_=/usr/bin/env
