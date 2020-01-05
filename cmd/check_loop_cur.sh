@@ -13,6 +13,7 @@ do
     # echo '200 OK'
     break
   fi
+  echo looping ...
 done
 end_time=$(date +"%s.%3N")
 # time=$((end_time - start_time))
