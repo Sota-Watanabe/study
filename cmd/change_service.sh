@@ -54,7 +54,7 @@ do
             value: "$loop"
           resources:
             limits:
-              cpu: "500m"
+              cpu: "1000m"
 EOF
 
   status=`check_curl.sh array-init`
@@ -83,7 +83,7 @@ EOF
 
   echo 'start cpumem.sh'
   echo ''
-  bash cpumem.sh
+  bash cpumem.sh -n 3
 
   echo '' > /home/watanabe/go/src/k8s.io/kubernetes-v1.15.5/checkpoint-list.dat
   
