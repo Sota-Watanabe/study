@@ -54,15 +54,15 @@ do
             value: "$loop"
           resources:
             limits:
-              cpu: "1000m"
+              cpu: "1500m"
 EOF
 
-  status=`check_curl.sh array-init`
+  status=`bash check_curl.sh array-init`
   while [ $status != '200' ];
   do
     echo 'making init container'
     sleep 0.5
-    status=`check_curl.sh array-init`
+    status=`bash check_curl.sh array-init`
   done
   echo 'Completion of Container registration'
   if "${cp}"; then
