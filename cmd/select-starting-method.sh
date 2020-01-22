@@ -26,6 +26,8 @@ check_new_container (){
     return 1
 
 }
+echo 'reset container_data.csv'
+echo '' > container_data.csv
 
 ksvc=`kubectl get ksvc -o=jsonpath="{.items[*].metadata.name}"`
 echo $ksvc
@@ -33,10 +35,9 @@ if [ "$ksvc" != "" ]; then
     echo 'ksvc is not 0'
     exit 
 fi
-echo 'waiting ...'
 while true
 do
-    echo 'waiting ...'
+    echo 'waiting ... please apply new container'
     sleep 1
     check_new_container
     ret=$?
@@ -51,7 +52,7 @@ do
     do
         echo 'checking_HTTP-200 to '$ksvc_name
         sleep 0.5
-        status=`bash check_curl.sh $ksvc_name`
+        status=`bash check_curl.sh $ksvc_name /Sample1/SimpleServlet`
     done
 
     
@@ -63,6 +64,7 @@ do
     CPU_LIMIT=`kubectl get ksvc $ksvc_name -o=jsonpath="{.spec.template.spec.containers[*].resources.limits.cpu}"`
 
     echo "ksvc_name: "$ksvc_name", cpu-limit: "$CPU_LIMIT", CPU_TIME: "$CPU_TIME", MEM: "$MEM
+    echo $ksvc_name","$CPU_LIMIT","$CPU_TIME","$MEM >> container_data.csv
 done
 
 
