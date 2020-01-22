@@ -27,8 +27,16 @@ check_new_container (){
 
 }
 
+ksvc=`kubectl get ksvc -o=jsonpath="{.items[*].metadata.name}"`
+echo $ksvc
+if [ "$ksvc" != "" ]; then
+    echo 'ksvc is not 0'
+    exit 
+fi
+echo 'waiting ...'
 while true
 do
+    echo 'waiting ...'
     sleep 1
     check_new_container
     ret=$?
@@ -43,9 +51,18 @@ do
     do
         echo 'checking_HTTP-200 to '$ksvc_name
         sleep 0.5
-        status=`bash check_curl.sh array-init`
+        status=`bash check_curl.sh $ksvc_name`
     done
 
+    
+    ksvc_rev=`kubectl get ksvc $ksvc_name -o=jsonpath="{.status.latestCreatedRevisionName}"`
+    CID=`docker ps -f name=k8s_user-container_$ksvc_rev  -q`
+
+    MEM="`docker stats $CID --no-stream --format "{{.MemUsage}}"| awk '{print $1}'`"
+    CPU_TIME="`docker top $CID |awk 'NR==2'| awk '{print $7}'`"
+    CPU_LIMIT=`kubectl get ksvc $ksvc_name -o=jsonpath="{.spec.template.spec.containers[*].resources.limits.cpu}"`
+
+    echo "ksvc_name: "$ksvc_name", cpu-limit: "$CPU_LIMIT", CPU_TIME: "$CPU_TIME", MEM: "$MEM
 done
 
 
