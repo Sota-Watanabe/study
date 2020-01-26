@@ -76,6 +76,9 @@ do
         echo 'get Docker image'
         commit_name=watanabesota/$ksvc_name-cp-from-select-starting-method
         docker commit $CID $commit_name
+        echo 'push Docker image'
+        docker push $commit_name
+        docker pull $commit_name
         echo 'update docker image to cp-from-select-starting-method'
         kubectl patch ksvc $ksvc_name --type=json -p "[ { "op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "$commit_name" } ]" 
 

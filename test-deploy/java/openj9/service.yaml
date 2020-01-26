@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-      - image: watanabesota/openj9
+      - image: docker.io/watanabesota/openj9
         env:
         - name: TARGET
           value: "openj9 v1"
